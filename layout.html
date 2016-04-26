@@ -1,0 +1,228 @@
+{@ $oldIE = 0}
+{@ $browser_type = getenv("HTTP_USER_AGENT")}
+<!--@if(preg_match("/MSIE 8.0/",$browser_type))-->
+{@ $IE='8'; $oldIE=1}
+<!--@else if(preg_match("/MSIE 7.0/",$browser_type))-->
+{@ $IE='7'; $oldIE=1}
+<!--@else if(preg_match("/MSIE 6.0/",$browser_type))-->
+{@ $IE='6'; $oldIE=1}
+<!--@endif-->
+
+{@ $hide_visual_actions = false}
+<block cond="$act == 'IS'">{@ $hide_visual_actions = true}</block>
+<block cond="strpos($act, 'Member') !== false ">{@ $hide_visual_actions = true}</block>
+<block cond="strpos($act, 'Communication') !== false">{@ $hide_visual_actions = true}</block>
+
+{@ $layout_type = 'sub'}
+<block cond="!$hide_visual_actions && $site_module_info->module_srl === $current_module_info->module_srl">
+{@ $layout_type = 'main'}
+</block>
+<block cond="Context::get('act') == 'dispMemberSignUpForm' || Context::get('act') == 'dispMemberInfo'">
+{@ $layout_type = 'sub'}
+</block>
+ 
+<!-- CSS -->
+<load target="css/supersized.css" />
+<load target="css/supersized.shutter.css" />
+<load target="../../common/xeicon/xeicon.min.css" />
+<load target="css/layout.ex.css" />
+<load target="css/ widget.login.css" />
+ 
+<!-- JS -->
+<load target="js/jquery.easing.min.js" type="body" />
+<load target="js/supersized.3.2.7.js" />
+<load target="js/supersized.shutter.min.js" type="body" />
+ 
+ 
+<!-- 이미지 슬라이드의 이미지 경로 설정 -->
+<block loop="$i=0;$i<4;$i++">
+	{@ $imgsrc[$i] = $layout_info->path.'img/bg_slide2.jpg'}
+</block>
+ 
+<block cond="$layout_info->slider1_image">
+	{@ $imgsrc[0] = $layout_info->slider1_image}
+</block>
+<block cond="$layout_info->slider2_image">
+	{@ $imgsrc[1] = $layout_info->slider2_image}
+</block>
+<block cond="$layout_info->slider3_image">
+	{@ $imgsrc[2] = $layout_info->slider3_image}
+</block>
+<block cond="$layout_info->slider4_image">
+	{@ $imgsrc[3] = $layout_info->slider4_image}
+</block>
+ 
+<script type="text/javascript">
+	jQuery(function($){	
+        $('.container').addClass('{$layout_info->color_set}');
+        
+        // supersized background script option start    
+		$.supersized({
+			// Functionality
+			slide_interval          :   5000,		// Length between transitions
+			transition              :   1, 			// 0-None, 1-Fade, 2-Slide Top, 3-Slide Right, 4-Slide Bottom, 5-Slide Left, 6-Carousel Right, 7-Carousel Left
+			transition_speed		:	1500,		// Speed of transition
+													   
+			// Components							
+			slide_links				:	'blank',	// Individual links for each slide (Options: false, 'num', 'name', 'blank')
+			slides 					:  	[			// Slideshow Images
+												{image : '{$imgsrc[0]}', title : '<p class="lst_txt">{$layout_info->slider1_description_en}</p><p class="lst_txt2">{$layout_info->slider1_description_kr}</p>', thumb : 'img/bg_slide1.jpg', url : '#'},
+												{image : '{$imgsrc[1]}', title : '<p class="lst_txt">{$layout_info->slider2_description_en}</p><p class="lst_txt2">{$layout_info->slider2_description_kr}</p>', thumb : 'img/bg_slide2.jpg', url : '#'},  
+												{image : '{$imgsrc[2]}', title : '<p class="lst_txt">{$layout_info->slider3_description_en}</p><p class="lst_txt2">{$layout_info->slider3_description_kr}</p>', thumb : 'img/bg_slide3.jpg', url : '#'},
+												{image : '{$imgsrc[3]}', title : '<p class="lst_txt">{$layout_info->slider4_description_en}</p><p class="lst_txt2">{$layout_info->slider4_description_kr}</p>', thumb : 'img/bg_slide4.jpg', url : '#'}
+										]
+		});
+        
+	});    
+	// supersized background script option end
+</script>
+</head>
+ 
+<block cond="$layout_type == 'sub'">
+<!--@if(!$oldIE && $layout_info->sub_body_color_img)-->	
+<div class="body_bg" style="background:url({$layout_info->sub_body_color_img}) 100% 100% no-repeat;background-size:cover"></div>
+<!--@else if($layout_info->sub_body_color)-->
+<div class="body_bg" style="background:#{$layout_info->sub_body_color}"></div>
+<!--@else-->
+<span class="body_bg"></span>
+<!--@endif-->
+</block>
+<!-- header 그라데이션 -->
+<span class="header_bg"></span>
+<!-- body right bg 그라데이션 -->
+<span class="body_bg_right {$layout_info->body_bg_right_set}"></span>
+<!-- container -->
+<!-- [D] 컬러테마 적용시 클래스 color_tm2, color_tm3 추가 -->
+ 
+<div class="container ex_ct<!--@if($layout_type == 'sub')--> ex_sub<!--@end-->">
+	<!-- header : 사이드 메뉴 및 로그인영역 -->
+	<include target="header.html" />
+	<block cond="$layout_type == 'main'">
+		<!-- main slide_content -->
+		<div class="slide_wrap">
+			<div class="slide_content">
+				<div class="content_lst" id="slidecaption"></div>
+				<div id="controls-wrapper" class="load-item">
+					<!--Navigation-->
+					<div id="controls">
+						<ul id="slide-list"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //main slide_content -->
+	</block>
+	<!-- CONTENT -->
+
+	<div id="content" class="content">
+	<!--@if($layout_type == 'sub')-->
+		<div class="content_inn">
+			<div class="inn_section">
+				<h2>{$module_info->browser_title}</h2>
+				<p class="route_txt"><a href="#">홈</a><span cond="$menu_title_depth1"> &gt; </span><a href="#" cond="$menu_title_depth1">{$menu_title_depth1}</a><span cond="$menu_title_depth2"> &gt; </span><a href="#" cond="$menu_title_depth2">{$menu_title_depth2}</a></p>
+			</div>
+			<!--@if($layout_info->sub_ly_color_img)-->	
+			<div class="inn_section2" style="background:url({$layout_info->sub_ly_color_img}) 100% 100% no-repeat">
+			<!--@elseif($layout_info->sub_ly_color)-->
+			<div class="inn_section2" style="background:#{$layout_info->sub_ly_color}">
+			<!--@else-->
+			<div class="inn_section2">
+			<!--@end-->
+				<!-- [D] 내용 삽입 영역 -->
+				{$content}
+				<!-- //내용 삽입 영역 -->
+			</div>
+		</div>
+	<!--@end-->
+	</div>
+	<!-- /CONTENT -->
+ 	<include target="footer.html" />
+	
+</div>
+ 
+<!-- Login widget -->
+<section class="login_widget" style="display:none"|cond="$XE_VALIDATOR_ID != 'layouts/xedition/layout/1' || !$XE_VALIDATOR_MESSAGE">
+	<load target="./css/widget.login.css" />
+	<div class="ly_dimmed"></div>
+	<div class="signin">
+		<div class="login-header">
+			<h1>LOGIN</h1>
+		</div>
+		<div class="login-body">
+			<form action="{getUrl()}" method="post" autocomplete="off">
+				<input type="hidden" name="act" value="procMemberLogin" />
+				<input type="hidden" name="success_return_url" value="{htmlspecialchars(getRequestUriByServerEnviroment(), ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE)}" />
+				<input type="hidden" name="xe_validator_id" value="layouts/xedition/layout/1" />
+				<fieldset>
+					<legend class="blind">{$lang->cmd_login}</legend>
+					<div class="control-group">
+						<div class="group">
+							<input type="text" name="user_id" id="uemail" required="true" />
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label class="info_label" for="uemail">{$lang->user_id}</label>
+						</div>
+						<div class="group">
+							<input type="password" name="password" id="upw" required="true" />
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label class="info_label" for="upw">{$lang->password}</label>
+						</div>
+					</div>
+					<div cond="$XE_VALIDATOR_ID == 'layouts/xedition/layout/1' && $XE_VALIDATOR_MESSAGE" class="control-group">
+						<p class="error">{$XE_VALIDATOR_MESSAGE}</p>
+					</div>
+					<div class="control-group">
+						<label class="chk_label" for="keepid_opt">
+							<input type="checkbox" name="keep_signed" id="keepid_opt" value="Y" />
+							<span class="checkbox"></span> {$lang->keep_signed}
+						</label>
+						<div id="warning">
+							<p>{str_replace('\n\n', '<br />', $lang->about_keep_signed)}</p>
+							<div class="edge"></div>
+						</div>
+						<button type="submit" class="btn_submit">{$lang->cmd_login}</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="login-footer">
+			<a href="{getUrl('act', 'dispMemberFindAccount')}">{$lang->cmd_find_member_account}</a>
+			<span class="f_bar">|</span>
+			<a href="{getUrl('act', 'dispMemberSignUpForm')}">{$lang->cmd_signup}</a>
+		</div>
+		<a href="#" class="btn_ly_popup"><span class="blind">닫기</span></a>
+	</div>
+	<script>
+	jQuery(function ($) {
+		var keep_msg = $("#warning");
+		$(".chk_label").on("mouseenter mouseleave focusin focusout", function (e) {
+			if(e.type == "mouseenter" || e.type == "focusin") {
+				keep_msg.show();
+			}
+			else {
+				keep_msg.hide();
+			}
+		});
+		$("#ly_login_btn, #ly_btn").click(function () {
+			$(".login_widget").show();
+			return false;
+		});
+		$(".btn_ly_popup").click(function () {
+			$(".login_widget").hide();
+			return false;
+		});
+		$("input").blur(function () {
+			var $this = $(this);
+			if ($this.val()) {
+				$this.addClass("used");
+			}
+			else {
+				$this.removeClass("used");
+			}
+		});
+	});
+	</script>
+</section>
+<!-- /Login widget -->
+ 

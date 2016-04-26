@@ -1,0 +1,41 @@
+<div class="footer_wrap">
+	<footer class="footer">
+        <div class="footer_inn">
+			<span class="ft_bg"></span>
+			<p class="ft_txt">
+				<span class="links_area">
+                    <block loop="$bottom_menu->list=>$key1,$val1">
+                    	<a href="{$val1['href']}">{$val1['link']}</a>
+						<block cond="$val1['selected']">{@ $menu_title_depth1=$val1['link']}</block>
+                    </block>
+                </span>
+                <!--@if($layout_info->href_copy||$layout_info->href_copy_txt)-->
+                {@ $chk_copy_slash = 1}
+                <span class="ft_bar">/</span>Copyright &copy; 
+                    <!--@if($layout_info->href_copy)-->
+                    <a href="{$layout_info->href_copy}">
+                        <span cond="$layout_info->href_copy_txt">{$layout_info->href_copy_txt}.</span>
+                        <span cond="!$layout_info->href_copy_txt">Test Corp.</span>
+                    </a>
+                    <!--@else-->
+                    <span cond="$layout_info->href_copy_txt">{$layout_info->href_copy_txt}.</span>
+                    <span cond="!$layout_info->href_copy_txt">Test Corp.</span>
+                    <!--@end-->
+                <!--@end-->
+                <!--@if($layout_info->href_supt||$layout_info->href_supt_txt)-->
+                <span class="ft_bar" cond="!$chk_copy_slash">/</span>Supported by 
+                    <!--@if($layout_info->href_supt)-->
+                    <a href="{$layout_info->href_supt}">
+                        <span cond="$layout_info->href_supt_txt">{$layout_info->href_supt_txt}.</span>
+                        <span cond="!$layout_info->href_supt_txt">Test Program.</span>
+                    </a>
+                    <!--@else-->
+                    <span cond="$layout_info->href_supt_txt">{$layout_info->href_supt_txt}.</span>
+                    <span cond="!$layout_info->href_supt_txt">Test Program.</span>
+                    <!--@end-->
+                <!--@end-->
+			</p>
+		</div>
+	</footer>
+</div>
+

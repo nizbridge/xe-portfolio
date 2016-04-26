@@ -1,0 +1,99 @@
+<div class="header_wrap">
+	<header class="header">
+		<div class="header_inn">
+			<!-- [D] 컬러 테마에 따라 로고 이미지 수정 logo_ver1~3.png -->
+            {@ 
+                $logo_height = 64;
+                $logo_width = 96
+            }
+            <block cond="$layout_info->logo_img_h">
+                {@ $logo_height = $layout_info->logo_img_h}
+            </block>
+            <block cond="$layout_info->logo_img_w">
+                {@ $logo_width = $layout_info->logo_img_w}
+            </block>
+			<span class="ex_logo">
+				<!--@if($layout_info->logo_img)-->
+				<img src="{$layout_info->logo_img}" width="{$logo_width}" height="{$logo_height}" alt="{$layout_info->logo_image_alt}">
+                <!--@elseif($layout_info->color_set == 'color_tm2')-->
+                <img src="img/logo_ver2.png" width="{$logo_width}" height="{$logo_height}" alt="{$layout_info->logo_image_alt}">
+                <!--@elseif($layout_info->color_set == 'color_tm3')-->
+                <img src="img/logo_ver3.png" width="{$logo_width}" height="{$logo_height}" alt="{$layout_info->logo_image_alt}">
+                <!--@else-->
+                <img src="img/logo_ver1.png" width="{$logo_width}" height="{$logo_height}" alt="{$layout_info->logo_image_alt}">
+                <!--@end-->
+            </span>
+			<h1>
+				<a href="/"|cond="$layout_info->logo_url == ''" href="{$layout_info->logo_url}"|cond="$layout_info->logo_url != ''" id="siteTitle">{$layout_info->logo_image_alt}</a>
+			</h1>
+			<!-- gnb -->
+			<div class="gnb">
+				<ul class="gnb_lst">
+					<!-- menu loop depth1 -->
+					{@ $menu_icon_cnt =0}
+					<li loop="$main_menu->list=>$key1,$val1">
+						{@ 
+							$menu_icon_txt = spliti (",", $layout_info->gnb_menu_icon1);
+						}
+						<block cond="count($val1['list']) == 0">
+							<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'"><span>
+								<!--@if($menu_icon_txt[$menu_icon_cnt])-->
+									<i class="{$menu_icon_txt[$menu_icon_cnt]}"></i>
+								<!--@else-->
+									<i class="xi-tent"></i>
+								<!--@end-->
+								{$val1['link']}</span></a>
+							<block cond="$val1['selected']">{@ $menu_title_depth1=$val1['link']}</block>
+						</block>
+						<!-- menu loop depth2 -->
+						<block cond="count($val1['list']) > 0">
+							<dl>
+								<!-- [D] 선택된 메뉴의 목차 on_lst 클래스 추가 / 선택된 메뉴의 항목 on_sub_lst 추가 -->
+								<dt class="on_lst"|cond="$val1['selected']">
+									<a href="{$val1['href']}"><span>
+										<!--@if($menu_icon_txt[$menu_icon_cnt])-->
+											<i class="{$menu_icon_txt[$menu_icon_cnt]}"></i>
+										<!--@else-->
+											<i class="xi-tent"></i>
+										<!--@end-->
+										{$val1['link']}</span></a>
+									<block cond="$val1['selected']">{@ $menu_title_depth1=$val1['link']}</block>
+								</dt>
+								<block loop="$val1['list']=>$key2,$val2">
+									<dd class="on_sub_lst"|cond="$val2['selected']">
+										<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a>
+										<block cond="$val2['selected']">{@ $menu_title_depth2=$val2['link']}</block>
+									</dd>
+								</block>
+							</dl>
+						</block>
+						{@ $menu_icon_cnt++}
+					</li>
+				</ul>
+			</div>
+			<!-- //gnb -->
+			<!-- login -->
+			<!-- [D] 로그인 in, 로그아웃 out 클래스 추가 -->
+			<!--@if(!$is_logged)-->
+				<!-- begin_login -->
+				<div class="log_area out">
+					<ul>
+						<li class="log_lst1"><a href="{getUrl('act','dispMemberLoginForm')}" id="ly_login_btn"class="log_btn"><i class="xi-user"></i><span class="bg_ft_bubble">login</span></a></li>
+						<li class="log_lst2"><a href="{getUrl('act','dispMemberSignUpForm')}" class="log_btn"><i class="xi-plus-circle"></i><span class="bg_ft_bubble">join</span></a></li>
+					</ul>
+				</div>
+			<!--@else-->
+				<!-- after_login -->
+				<div class="log_area in">
+					<ul>
+						<li class="log_lst1"><a href="{getUrl('act','dispMemberLogout')}" class="log_btn ex_log"><i class="xi-user-add"></i><span class="bg_ft_bubble">logout</span></a></li>
+						<li class="log_lst3"><a href="{getUrl('act','dispMemberInfo','member_srl','')}" class="log_btn"><i class="xi-user-info"></i><span class="bg_ft_bubble">my page</span></a></li>
+						<li cond="$logged_info->is_admin == 'Y'" class="log_lst4"><a href="{getUrl('', 'module','admin')}" class="log_btn"><i class="xi-command"></i><span class="bg_ft_bubble">setting</span></a></li>
+					</ul>
+				</div>
+			<!--@end-->
+			<!-- //login -->
+		</div>
+	</header>
+</div>
+ 
